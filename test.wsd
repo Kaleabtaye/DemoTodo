@@ -1,0 +1,64 @@
+@startuml
+
+class User {
+    - username : string
+    - password : string
+    --
+    + User()
+    + User(username : string, password : string)
+    + getUsername() : string
+    + getPassword() : string
+}
+
+class AuthManager {
+    - usersFilePath : string
+    - users : vector<User>
+    --
+    + AuthManager(filePath : string)
+    + signup(username : string, password : string) : bool
+    + login(username : string, password : string, outUser : User&) : bool
+}
+
+class TodoItem {
+    - id : int
+    - text : string
+    - done : bool
+    --
+    + TodoItem()
+    + TodoItem(id : int, text : string, done : bool)
+    + getId() : int
+    + getText() : string
+    + isDone() : bool
+    + setText(newText : string)
+    + setDone(value : bool)
+}
+
+class TodoManager {
+    - filePath : string
+    - todos : vector<TodoItem>
+    - nextId : int
+    --
+    + TodoManager(filePath : string)
+    + listTodos() : void
+    + addTodo(text : string) : void
+    + updateTodo(id : int, newText : string) : bool
+    + toggleDone(id : int) : bool
+    + deleteTodo(id : int) : bool
+}
+
+class App {
+    - auth : AuthManager
+    --
+    + App(usersFilePath : string)
+    + run() : void
+    - showMainMenu() : void
+    - showTodoMenu(user : const User&) : void
+}
+
+AuthManager "1" o-- "*" User
+TodoManager "1" o-- "*" TodoItem
+App "1" o-- "1" AuthManager
+App ..> TodoManager
+App ..> User
+
+@enduml
